@@ -67,16 +67,21 @@ public class RunTest {
 
     public static void main(String[] args) {
         float total = 0;
+        int count = 0;
         for (int year = 2017; year <= 2021; year++) {
             for (int month = 1; month <= 12; month++) {
                 List<Bill> monthBills = getMonthBills(year + "-" + month);
-                for (Bill bill: monthBills) {
+                if (monthBills == null)
+                    continue;
+                count += monthBills.size();
+                for (Bill bill : monthBills) {
                     System.out.println(bill);
                     Float paymentAmount = bill.getPaymentAmount();
                     total += paymentAmount;
                 }
             }
         }
+        System.out.println(count);
         System.out.println(total);
     }
 }
