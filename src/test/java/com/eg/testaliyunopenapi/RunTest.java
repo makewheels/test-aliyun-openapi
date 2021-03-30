@@ -75,9 +75,10 @@ public class RunTest {
                     continue;
                 count += monthBills.size();
                 for (Bill bill : monthBills) {
+                    bill.setYear(year);
+                    bill.setMonth(month);
                     System.out.println(bill);
-                    Float paymentAmount = bill.getPaymentAmount();
-                    total += paymentAmount;
+                    total += bill.getPaymentAmount();
                 }
             }
         }

@@ -3,8 +3,13 @@ package com.eg.testaliyunopenapi.bean;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class Bill {
+    private int year;
+    private int month;
+
     private Float afterTaxAmount;
     private String commodityCode;
     private String currency;
@@ -17,7 +22,7 @@ public class Bill {
     private String ownerID;
     private Float paymentAmount;
     private String paymentCurrency;
-    private String paymentTime;
+    private Date paymentTime;
     private String paymentTransactionID;
     private String pipCode;
     private Float pretaxAmount;
@@ -33,8 +38,8 @@ public class Bill {
     private String subOrderId;
     private String subscriptionType;
     private Float tax;
-    private String usageEndTime;
-    private String usageStartTime;
+    private Date usageEndTime;
+    private Date usageStartTime;
 
     @Override
     public String toString() {
