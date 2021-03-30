@@ -4,7 +4,10 @@ import com.aliyun.bssopenapi20171214.Client;
 import com.aliyun.bssopenapi20171214.models.QueryBillRequest;
 import com.aliyun.bssopenapi20171214.models.QueryBillResponseBody;
 import com.aliyun.teaopenapi.models.Config;
+import com.eg.testaliyunopenapi.bean.Bill;
+import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RunTest {
@@ -40,25 +43,40 @@ public class RunTest {
         return null;
     }
 
-    public static void main(String[] args) {
+    public static List<Bill> getMonthBills(String billingCycle) {
+        System.out.println("query " + billingCycle);
         int pageNum = 1;
-        int pageSize = 50;
+        int pageSize = 200;
         QueryBillResponseBody.QueryBillResponseBodyData data;
+        List<Bill> result = new ArrayList<>();
         do {
-            data = queryBill("2021-03", pageNum, pageSize);
+            data = queryBill(billingCycle, pageNum, pageSize);
             pageNum++;
             if (data == null)
-                return;
-            System.out.println(data.pageNum + " " + data.pageSize + " " + data.totalCount);
-            List<QueryBillResponseBody.QueryBillResponseBodyDataItemsItem> itemList
-                    = data.items.item;
-            for (QueryBillResponseBody.QueryBillResponseBodyDataItemsItem
-                    item : itemList) {
-                if (item.pretaxAmount == 0.0)
-                    continue;
-                System.out.println(item.usageStartTime + " " + item.recordID
-                        + " " + item.productName + " " + item.pipCode + " " + item.pretaxAmount);
-            }
+                return null;
+            data.items.item.forEach(each -> {
+                if (each.paymentAmount == 0)
+                    return;
+                Bill bill = new Bill();
+                BeanUtils.copyProperties(each, bill);
+                result.add(bill);
+            });
         } while (data.pageNum * data.pageSize < data.totalCount);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        float total = 0;
+        for (int year = 2017; year <= 2021; year++) {
+            for (int month = 1; month <= 12; month++) {
+                List<Bill> monthBills = getMonthBills(year + "-" + month);
+                for (Bill bill: monthBills) {
+                    System.out.println(bill);
+                    Float paymentAmount = bill.getPaymentAmount();
+                    total += paymentAmount;
+                }
+            }
+        }
+        System.out.println(total);
     }
 }
