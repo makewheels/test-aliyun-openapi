@@ -54,7 +54,7 @@ public class RunTest {
                     = data.items.item;
             for (QueryBillResponseBody.QueryBillResponseBodyDataItemsItem
                     item : itemList) {
-                if (item.pretaxAmount == 0)
+                if (item.pretaxAmount == 0.0)
                     continue;
                 System.out.println(item.usageStartTime + " " + item.recordID
                         + " " + item.productName + " " + item.pipCode + " " + item.pretaxAmount);
